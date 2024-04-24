@@ -11,7 +11,7 @@ let totalSell = 0;
 clear()
 console.log("\n__________START__________\n");
 
-if (document.getElementsByClassName("border-b-2 border-accentBlue")[3].textContent !== 'Market'){
+if (document.getElementsByClassName("border-b-2 border-accentBlue")[3].textContent !== 'PARCL/USDC'){
     console.log(" - Click Market trade")
     document.getElementsByClassName("flex flex-col cursor-pointer justify-center py-2")[9].click()
 }
