@@ -25,8 +25,9 @@ const Start = async () => {
     trade_btn.click();
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    console.log(` - Click button: ${document.getElementsByClassName('bg-baseBackgroundL1')[3].textContent}`); //max button
-    document.getElementsByClassName('bg-baseBackgroundL1')[3].click(); 
+    const max_btn = document.getElementsByClassName('bg-baseBackgroundL1')[6]
+    console.log(` - Click button: ${max_btn.textContent}`); //max button
+    max_btn.click(); 
     await new Promise(resolve => setTimeout(resolve, 5000));
 
     console.log(`   === ${trade_btn.textContent} ===`);
