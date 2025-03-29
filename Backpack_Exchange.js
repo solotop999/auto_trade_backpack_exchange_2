@@ -1,54 +1,100 @@
+const number = 100,
+    minSleep = 10,
+    maxSleep = 30;
+let count = 0,
+    totalBuy = 0,
+    totalSell = 0;
 
-/////// Setting here ///////
-const number = 1000; // total number buy/sell
-const minSleep = 10; // 10s
-const maxSleep = 30; // 30s
-///////////////////////////
-
-let count = 0;
-let totalBuy = 0;
-let totalSell = 0;
-clear()
+clear();
 console.log("\n__________START__________\n");
 
-if (document.getElementsByClassName("border-b-2 border-accentBlue")[3].textContent !== 'Market'){
-    console.log(" - Click Market trade")
-    document.getElementsByClassName("flex flex-col cursor-pointer justify-center py-2")[9].click()
+const delay = (e) => new Promise((t) => setTimeout(t, e));
+
+const click_max = () => {
+    const e = document.getElementsByClassName(
+        "bg-accent-blue top-0.5 h-3.5 w-3.5 cursor-grab rounded-full"
+    )[0];
+
+    if (e) {
+        const t = e.getBoundingClientRect().left;
+        e.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: t }));
+        e.dispatchEvent(
+            new PointerEvent("pointermove", { bubbles: true, clientX: 0.95 * window.innerWidth })
+        );
+        e.dispatchEvent(
+            new PointerEvent("pointerup", { bubbles: true, clientX: 0.95 * window.innerWidth })
+        );
+    } else {
+        console.error("Element not found.");
+    }
+};
+
+const orderMenu = document.getElementsByClassName("items-center justify-center flex-row flex gap-2 gap-x-0")[0];
+
+if (orderMenu) {
+    const e = Array.from(orderMenu.children).find((e) => e.textContent.trim() === "Market");
+    if (e) {
+        console.log("Click Market order", e);
+        e.click();
+    } else {
+        console.log("Market button not found.");
+    }
+} else {
+    console.log("orderMenu element not found.");
 }
 
 const Start = async () => {
-    console.log('--------------------------')
-    console.log(`Total: Buy: ${totalBuy}  |  Sell: ${totalSell}`)
-    let trade_btn = document.getElementsByClassName('border-b-baseBorderMed')[0];
+    console.log("--------------------------");
+    console.log(`Total: Buy: ${totalBuy}  |  Sell: ${totalSell}`);
 
-    console.log(` - Click tab: ${trade_btn.textContent}`);// buy/sell button
-    trade_btn.click();
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    let e = document.getElementsByClassName("w-full rounded-xl text-sm font-semibold"),
+        t = e[0],
+        o = e[1];
 
-    const max_btn = document.getElementsByClassName('cursor-pointer bg-baseBackgroundL2')[6]
-    console.log(` - Click button: ${max_btn.textContent}`); //max button
-    max_btn.click(); 
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    t.click();
+    await delay(2000);
+    click_max();
+    await delay(2000);
+    console.log(" - Click: BUY");
 
-    console.log(`   === ${trade_btn.textContent} ===`);
-    if (trade_btn.textContent === 'Buy'){
-        document.getElementsByClassName('bg-greenPrimaryButtonBackground ')[0].click() // Start Buy
-        totalBuy++
-    } else {
-        document.getElementsByClassName('bg-redPrimaryButtonBackground')[0].click() // Start sell
-        totalSell++
+    let l = document.getElementsByClassName(
+        "text-center font-semibold focus:ring-blue-200 bg-green-primary-button-background text-green-primary-button-text"
+    )[0];
+
+    try {
+        l.click();
+        totalBuy++;
+    } catch (e) {
+        console.log("ERROR: BUY: ", e);
     }
 
-    const randomNumber = Math.floor(Math.random() * (maxSleep - minSleep + 1)) + minSleep; 
-    console.log(` - Waiting: ${randomNumber}s ...`);
-    await new Promise(resolve => setTimeout(resolve, randomNumber * 1000));
-    
+    await delay(5000);
+    o.click();
+    await delay(2000);
+    click_max();
+    await delay(2000);
+    console.log(" - Click: SELL");
+
+    let n = document.getElementsByClassName(
+        "text-center font-semibold bg-red-primary-button-background text-red-primary-button-text"
+    )[0];
+
+    try {
+        n.click();
+        totalSell++;
+    } catch (e) {
+        console.log("ERROR: SELL: ", e);
+    }
+
+    const c = Math.floor(Math.random() * (maxSleep - minSleep + 1)) + minSleep;
+    console.log(` - Waiting: ${c}s ...`);
+    await delay(2000 * c);
     count++;
 
     if (count < number) {
-        console.clear()
+        console.clear();
         await Start();
     }
-}
+};
 
 Start();
